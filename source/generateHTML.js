@@ -14,8 +14,8 @@ function GenerateHTML(employees)
 		  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	  
 		  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"/>
-		  <link rel="stylesheet" href="./reset.css"/>
-		  <link rel="stylesheet" href="./style.css"/>
+		  <link rel="stylesheet" href="../styling/reset.css"/>
+		  <link rel="stylesheet" href="../styling/style.css"/>
 		  
 		  <title>My Team</title>
 		</head>
