@@ -1,6 +1,7 @@
 body
 {
     background-color: rgb(32, 32, 35);
+    color: #dddddd;
 }
 
 h1
@@ -10,4 +11,50 @@ h1
     background-color: rgb(15, 59, 74);
     padding: 1% 0% 1% 0%;
     color: #dddddd;
+}
+
+#teamContainer
+{
+    padding: 3% 15% 0% 15%;
+}
+
+.employeeCard
+{
+    background-color: rgb(15, 59, 74);
+    border-radius: 5px;
+}
+
+.employeeCardInterior
+{
+    padding: 2%;
+}
+
+.employeeCardHeader
+{
+    padding: 3% 2% 3% 10%;
+    
+    border-radius: 5px;
+    margin-bottom: 5%;
+}
+
+.employeeName
+{
+    color: white;
+    font-size: 160%;
+    margin-bottom: 3%;
+}
+
+.employeeRole
+{
+    font-size: 120%;
+}
+
+.employeeCardHeader
+{
+    background-color: rgb(22, 89, 112);
+}
+
+.employeeInfo
+{
+    padding: 1% 0% 1% 0%;
 }

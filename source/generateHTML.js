@@ -15,21 +15,22 @@ function GenerateHTML(employees)
 	  
 		  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"/>
 		  <link rel="stylesheet" href="./reset.css"/>
-		  <link rel="stylesheet" href="./testCSS.css"/>
+		  <link rel="stylesheet" href="./style.css"/>
 		  
-		  <title>Your Team</title>
+		  <title>My Team</title>
 		</head>
 	  
 		<body>
 		  <header>
-			  <h1>Your Team</h1>
+			  <h1>My Team</h1>
 		  </header>
 	  
-		  <div id="teamContainer">
-			  <div id="bodyContentContainer">${employeesHTMLString}</div>
-		  </div>
+		<div id="teamContainer">
+			<div class="row g-2">${employeesHTMLString}</div>
+		</div>
+
 		</body>
-	  </html>;`
+	  </html>`;
 }
 
 function GenerateEmployeeHTML(employee)
@@ -39,27 +40,36 @@ function GenerateEmployeeHTML(employee)
 
 	if (employeeRole === "Manager")
 	{
-		employeeUniqueString = `<div>Office Number: ${employee.GetOfficeNumber()}</div>`;
+		employeeUniqueString = `Office Number: ${employee.GetOfficeNumber()}`;
 	}
 	else if (employeeRole === "Engineer")
 	{
 		let username = employee.GetGithubUsername();
-		employeeUniqueString = `<div>Github: <a href="https://github.com/${username}">${username}</a></div>`;
+		employeeUniqueString = `Github: <a href="https://github.com/${username}">${username}</a>`;
 	}
 	if (employeeRole === "Intern")
 	{
-		employeeUniqueString = `<div>School: ${employee.GetSchool()}</div>`;
+		employeeUniqueString = `School: ${employee.GetSchool()}`;
 	}
 
-	return `<div class=col-4 employeeCard>
-		<div class=employeeCardHeader>
-			<div>${employee.GetName()}</div>
-			<div>${employeeRole}</div>
+	return `<div class="col-4">
+	<div class="employeeCard">
+	  	<div class="employeeCardInterior">
+  
+			<div class="employeeCardHeader">
+				<div class="employeeName">${employee.GetName()}</div>
+				<div class="employeeRole">${employeeRole}</div>
+			</div>
+	
+			<ul>
+				<li class="employeeInfo">ID: ${employee.GetID()}</li>
+				<li class="employeeInfo">Email: <a href="https://github.com/${employee.GetEmail()}">${employee.GetEmail()}</a></li>
+				<li class="employeeInfo">${employeeUniqueString}</li>
+			</ul>
+
+			</div>
 		</div>
-		<div>${employee.GetID()}</div>
-		<div>${employee.GetEmail()}</div>
-		${employeeUniqueString}
-	</div>`;
+  	</div>`;
 }
 
 exports.GenerateHTML = GenerateHTML;

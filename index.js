@@ -8,23 +8,6 @@ const Engineer = require("./library/engineer");
 const Intern = require("./library/intern");
 
 let employees = [];
-let finishedAddingEmployees;
-
-function MainLoop()
-{
-    AddManager();
-
-    while (finishedAddingEmployees === false) 
-    {
-        let newEmployeeType = GetNewTeamMemberType();
-
-        if (newEmployeeType === "Engineer") AddNewEngineer();
-        else if (newEmployeeType === "Intern") AddNewIntern();
-        else finishedAddingEmployees = true;
-    }
-
-    CreateFile(generateHTML.GenerateHTML());
-}
 
 function AddManager()
 {
@@ -52,6 +35,7 @@ function AddManager()
     ]).then((response) =>
     {
         employees.push(new Manager(response.managerName, response.managerId, response.managerEmail, response.managerOfficeNumber));
+        GetNewTeamMemberType();
     });
 }
 
@@ -64,7 +48,12 @@ function GetNewTeamMemberType()
         name: 'teamMemberType',
         choices: ["Engineer", "Intern", "All team members have been added"]
     },
-    ]).then((response) => { return response.teamMemberType; });
+    ]).then((response) => 
+    {
+        if (response.teamMemberType === "Engineer") return AddNewEngineer();
+        else if (response.teamMemberType === "Intern") return AddNewIntern();
+        else CreateFile(generateHTML.GenerateHTML(employees));
+    });
 }
 
 function AddNewEngineer()
@@ -72,27 +61,28 @@ function AddNewEngineer()
     inquirer.prompt([
     {
         type: 'input',
-        message: `What is the employee's name?`,
+        message: `What is the engineer's name?`,
         name: 'employeeName',
     },
     {
         type: 'input',
-        message: `What is the employee's id?`,
+        message: `What is the engineer's id?`,
         name: 'employeeId',
     },
     {
         type: 'input',
-        message: `What is the employee's email?`,
+        message: `What is the engineer's email?`,
         name: 'employeeEmail',
     },
     {
         type: 'input',
-        message: `What is the employee's github username?`,
+        message: `What is the engineer's github username?`,
         name: 'employeeGithubUsernamer',
     },
     ]).then((response) =>
     {
         employees.push(new Engineer(response.employeeName, response.employeeId, response.employeeEmail, response.employeeGithubUsernamer));
+        GetNewTeamMemberType();
     });
 }
 
@@ -101,27 +91,28 @@ function AddNewIntern()
     inquirer.prompt([
     {
         type: 'input',
-        message: `What is the employee's name?`,
+        message: `What is the intern's name?`,
         name: 'employeeName',
     },
     {
         type: 'input',
-        message: `What is the employee's id?`,
+        message: `What is the intern's id?`,
         name: 'employeeId',
     },
     {
         type: 'input',
-        message: `What is the employee's email?`,
+        message: `What is the intern's email?`,
         name: 'employeeEmail',
     },
     {
         type: 'input',
-        message: `What is the employee's school?`,
+        message: `What is the intern's school?`,
         name: 'employeeSchool',
     },
     ]).then((response) =>
     {
         employees.push(new Intern(response.employeeName, response.employeeId, response.employeeEmail, response.employeeSchool));
+        GetNewTeamMemberType();;
     });
 }
 
@@ -130,4 +121,4 @@ function CreateFile(HTMLString)
     fs.writeFile("./output/output.html", HTMLString , (error) => error ? console.error(error) : console.log("HTML created!"));
 }
 
-MainLoop();
+AddManager();
