@@ -1,0 +1,13 @@
+body
+{
+    background-color: rgb(32, 32, 35);
+}
+
+h1
+{
+    font-size: 300%;
+    text-align: center;
+    background-color: rgb(15, 59, 74);
+    padding: 1% 0% 1% 0%;
+    color: #dddddd;
+}

@@ -1,78 +1,133 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
-const generateMarkdown = require("./assets/generateMarkdown");
 
-class UserResponse
+const generateHTML = require("./source/generateHTML");
+
+const Manager = require("./library/manager");
+const Engineer = require("./library/engineer");
+const Intern = require("./library/intern");
+
+let employees = [];
+let finishedAddingEmployees;
+
+function MainLoop()
 {
-    constructor(projectTitle, description, usageInformation, liscenseType, installationCommand, testCommand, contributors, email, github)
+    AddManager();
+
+    while (finishedAddingEmployees === false) 
     {
-        this.projectTitle = projectTitle;
-        this.description = description;
-        this.usageInformation = usageInformation;
-        this.installationCommand = installationCommand;
-        this.liscenseType = liscenseType;
-        this.contributors = contributors;
-        this.testCommand = testCommand;
-        this.email = email;
-        this.github = github;
+        let newEmployeeType = GetNewTeamMemberType();
+
+        if (newEmployeeType === "Engineer") AddNewEngineer();
+        else if (newEmployeeType === "Intern") AddNewIntern();
+        else finishedAddingEmployees = true;
     }
+
+    CreateFile(generateHTML.GenerateHTML());
 }
 
-inquirer.prompt([
+function AddManager()
 {
-    type: 'input',
-    message: 'Please enter a title for your project:',
-    name: 'projectTitle',
-},
-{
-    type: 'input',
-    message: 'Please describe your project:',
-    name: 'description',
-},
-{
-    type: 'list',
-    message: 'Please enter the license type:',
-    name: 'liscenseType',
-    choices: ["mit", "gpl-2.0", "gpl-3.0", "agpl-3.0", "lgpl-3.0", "apache-2.0", "bsl-1.0", "bsd-2-clause", "bsd-3-clause", "cc0-1.0", "epl-2.0", "mpl-2.0", "unlicense"]
-},
-{
-    type: 'input',
-    message: 'Please enter the command to install dependencies:',
-    name: 'installationCommand',
-},
-{
-    type: 'input',
-    message: 'Please enter the command to run tests:',
-    name: 'testCommand',
-},
-{
-    type: 'input',
-    message: 'Please provide any extra information needed to use this project:',
-    name: 'usageInformation',
-},
-{
-    type: 'input',
-    message: 'Please enter the names of any contributors:',
-    name: 'contributors',
-},
-{
-    type: 'input',
-    message: 'Please enter your email address:',
-    name: 'email',
-},
-{
-    type: 'input',
-    message: 'Please enter your github username:',
-    name: 'github',
-},
-]).then((response) =>
-{
-    let userResponse = new UserResponse(response.projectTitle, response.description, response.usageInformation, response.liscenseType, response.installationCommand, response.testCommand, response.contributors, response.email, response.github);
-    let markdownString = generateMarkdown.GenerateMarkdownString(userResponse);
-    CreateMarkdownFromString(markdownString);
-});
-
-function CreateMarkdownFromString(markdownString)
-{
-    fs.writeFile("./assets/readMe.md", markdownString , (error) => error ? console.error(error) : console.log("ReadMe created!"));
+    inquirer.prompt([
+    {
+        type: 'input',
+        message: `What is your team manager's name?`,
+        name: 'managerName',
+    },
+    {
+        type: 'input',
+        message: `What is your team manager's id?`,
+        name: 'managerId',
+    },
+    {
+        type: 'input',
+        message: `What is your team manager's email?`,
+        name: 'managerEmail',
+    },
+    {
+        type: 'input',
+        message: `What is your team manager's office number?`,
+        name: 'managerOfficeNumber',
+    },
+    ]).then((response) =>
+    {
+        employees.push(new Manager(response.managerName, response.managerId, response.managerEmail, response.managerOfficeNumber));
+    });
 }
+
+function GetNewTeamMemberType()
+{
+    inquirer.prompt([
+    {
+        type: 'list',
+        message: 'What type of team member would you like to add?',
+        name: 'teamMemberType',
+        choices: ["Engineer", "Intern", "All team members have been added"]
+    },
+    ]).then((response) => { return response.teamMemberType; });
+}
+
+function AddNewEngineer()
+{ 
+    inquirer.prompt([
+    {
+        type: 'input',
+        message: `What is the employee's name?`,
+        name: 'employeeName',
+    },
+    {
+        type: 'input',
+        message: `What is the employee's id?`,
+        name: 'employeeId',
+    },
+    {
+        type: 'input',
+        message: `What is the employee's email?`,
+        name: 'employeeEmail',
+    },
+    {
+        type: 'input',
+        message: `What is the employee's github username?`,
+        name: 'employeeGithubUsernamer',
+    },
+    ]).then((response) =>
+    {
+        employees.push(new Engineer(response.employeeName, response.employeeId, response.employeeEmail, response.employeeGithubUsernamer));
+    });
+}
+
+function AddNewIntern()
+{ 
+    inquirer.prompt([
+    {
+        type: 'input',
+        message: `What is the employee's name?`,
+        name: 'employeeName',
+    },
+    {
+        type: 'input',
+        message: `What is the employee's id?`,
+        name: 'employeeId',
+    },
+    {
+        type: 'input',
+        message: `What is the employee's email?`,
+        name: 'employeeEmail',
+    },
+    {
+        type: 'input',
+        message: `What is the employee's school?`,
+        name: 'employeeSchool',
+    },
+    ]).then((response) =>
+    {
+        employees.push(new Intern(response.employeeName, response.employeeId, response.employeeEmail, response.employeeSchool));
+    });
+}
+
+function CreateFile(HTMLString)
+{
+    fs.writeFile("./output/output.html", HTMLString , (error) => error ? console.error(error) : console.log("HTML created!"));
+}
+
+MainLoop();
